@@ -234,7 +234,7 @@ class DialogDisplay:
 def main():
 
 
-    d = DialogDisplay( "Scanner (CTRL-C to Stop)", 50, 50)
+    d = DialogDisplay( "Scanner", 50, 50)
     d.add_buttons([    ("Exit", 0), ("Start", 0) ])
 
 

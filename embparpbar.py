@@ -58,9 +58,6 @@ class ProgressPool(Pool):
         # get the pool working asynchronously
         a_map = self.map_async(func, iterable, chunksize, callback=callback)
 
-        # Crux: monitor the _number_left of the a_map, and update the progress
-        # bar accordingly
-        # TODO should probably check for termination on each run here
         def update_completion(loop, user_data):
             time.sleep(0.1)
             left = a_map._number_left
@@ -68,8 +65,8 @@ class ProgressPool(Pool):
 
             if left == 0:
                 return
-	    loop.set_alarm_in(0.2,update_completion)
+	    loop.set_alarm_in(0.1,update_completion)
             loop.draw_screen()
-        self.alarm = self.loop.set_alarm_in(0.2,update_completion) 
+        self.alarm = self.loop.set_alarm_in(0.1,update_completion) 
         return a_map
 
