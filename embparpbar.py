@@ -62,7 +62,7 @@ class ProgressPool(Pool):
         # bar accordingly
         # TODO should probably check for termination on each run here
         while True:
-            time.sleep(0.1)
+            time.sleep(0.5)
             left = a_map._number_left
             self.bar.set_completion(total_items-left)
 

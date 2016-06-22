@@ -168,7 +168,7 @@ class DialogDisplay:
     def add_buttons(self, buttons):
         l = []
         for name, exitcode in buttons:
-            if name=="Stop":
+            if name=="Exit":
               b = urwid.Button( name, self.button_press_stop )
               b.exitcode = exitcode
             if name=="Start":
@@ -187,13 +187,6 @@ class DialogDisplay:
     def button_press_start(self, button):
         self.do_scan()
 
-
-    def dosomething(self, steps):
-        self.bar1.done = steps
-        for i in range(steps + 1):
-          self.bar1.set_completion(i)
-          os.system('sleep 0.2')
-          self.loop.draw_screen()
 
 
 
@@ -216,6 +209,7 @@ class DialogDisplay:
 
        ppool.add_pgbar(self.bar1)
        ppool.add_loop(self.loop)
+
        if(sslp=="yes"):
          results = ppool.map(scan_ssl, data)
        else:
@@ -228,11 +222,10 @@ class DialogDisplay:
 
 
     def main(self):
-
         self.loop = urwid.MainLoop(self.view, self.palette)
         try:
 
-            self.loop.run()
+           self.loop.run()
         except DialogExit, e:
             return self.on_exit( e.args[0] )
 
@@ -245,8 +238,8 @@ class DialogDisplay:
 def main():
 
 
-    d = DialogDisplay( "text", 50, 50)
-    d.add_buttons([    ("Stop", 0), ("Start", 0) ])
+    d = DialogDisplay( "Scanner (CTRL-C to Stop)", 50, 50)
+    d.add_buttons([    ("Exit", 0), ("Start", 0) ])
 
 
     # Run it
