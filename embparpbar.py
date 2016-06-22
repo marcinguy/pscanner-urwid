@@ -21,7 +21,7 @@ class ProgressPool(Pool):
 	super(ProgressPool, self).__init__()
 	self.bar = bar
 	self.loop = loop
-	
+
     def map(self, func, iterable, callback, chunksize=1, pbar='ProgressPool'):
         """ Apply function on iterables in available subprocess workers.
 
@@ -67,6 +67,7 @@ class ProgressPool(Pool):
                 return
 	    loop.set_alarm_in(0.1,update_completion)
             loop.draw_screen()
+            
         self.alarm = self.loop.set_alarm_in(0.1,update_completion) 
         return a_map
 

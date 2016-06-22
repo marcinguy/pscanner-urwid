@@ -23,6 +23,8 @@ import pprint
 
 
 def scan_nossl(d):
+          di.scan_box.base_widget.set_text("Scanning: "+d)
+          di.loop.draw_screen()
           d=str(d)
           try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -121,6 +123,7 @@ class DialogDisplay:
 
     def __init__(self, text, height, width, body=None):
         self.bar1 = urwid.ProgressBar('pg normal', 'pg complete')
+        self.scan_box = urwid.Text("")
         width = int(width)
         if width <= 0:
             width = ('relative', 80)
@@ -136,7 +139,7 @@ class DialogDisplay:
         self.frame = urwid.Frame( body, focus_part='footer')
         if text is not None:
             self.frame.header = urwid.Pile( [urwid.Text(text),
-                urwid.Divider(), self.bar1] )
+                urwid.Divider(), self.bar1, urwid.Divider(), self.scan_box] )
 
 
         # Adding progressbar
@@ -203,11 +206,12 @@ class DialogDisplay:
        output = args.output
        port = args.port
        sslp = args.ssl
-       data = open(input,'r')
+       data = open(input,'rU')
        # Create pool (ppool)
        ppool = ProgressPool(self.bar1,self.loop)
 
        def process_results(results):
+           
            resfile = open(output,'w')
            for r in results:
                resfile.write(r+"\n")
@@ -233,13 +237,14 @@ class DialogDisplay:
 
 def main():
 
+    global di
 
-    d = DialogDisplay( "Scanner", 50, 50)
-    d.add_buttons([    ("Exit", 0), ("Start", 0) ])
+    di = DialogDisplay( "Scanner", 50, 50)
+    di.add_buttons([    ("Exit", 0), ("Start", 0) ])
 
 
     # Run it
-    exitcode, exitstring = d.main()
+    exitcode, exitstring = di.main()
 
     # Exit
     if exitstring:
