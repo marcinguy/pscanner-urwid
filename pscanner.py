@@ -21,6 +21,16 @@ from embparpbar import ProgressPool
 
 import pprint
 
+class SwitchingPadding(urwid.Padding):
+    def padding_values(self, size, focus):
+        maxcol = size[0]
+        width, ignore = self.original_widget.pack(size, focus=focus)
+        if maxcol > width:
+            self.align = "left"
+        else:
+            self.align = "right"
+        return urwid.Padding.padding_values(self, size, focus)
+
 
 def scan_nossl(d):
           di.scan_box.base_widget.set_text("Scanning: "+d)
@@ -123,6 +133,12 @@ class DialogDisplay:
 
     def __init__(self, text, height, width, body=None):
         self.bar1 = urwid.ProgressBar('pg normal', 'pg complete')
+        # Create BigText
+        bt = urwid.BigText("Scanner",  urwid.font.Thin6x6Font())
+        bt = urwid.Padding(bt, 'left', width='clip')
+        bt = urwid.Filler(bt, 'bottom')
+        bt = urwid.BoxAdapter(bt, 7)
+
         self.scan_box = urwid.Text("")
         width = int(width)
         if width <= 0:
@@ -138,9 +154,8 @@ class DialogDisplay:
 
         self.frame = urwid.Frame( body, focus_part='footer')
         if text is not None:
-            self.frame.header = urwid.Pile( [urwid.Text(text),
+            self.frame.header = urwid.Pile( [ urwid.Text(text), bt,
                 urwid.Divider(), self.bar1, urwid.Divider(), self.scan_box] )
-
 
         # Adding progressbar
 
@@ -239,7 +254,7 @@ def main():
 
     global di
 
-    di = DialogDisplay( "Scanner", 50, 50)
+    di = DialogDisplay( "Scanner v0.99", 50, 50)
     di.add_buttons([    ("Exit", 0), ("Start", 0) ])
 
 
