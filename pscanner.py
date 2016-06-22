@@ -205,21 +205,17 @@ class DialogDisplay:
        sslp = args.ssl
        data = open(input,'r')
        # Create pool (ppool)
-       ppool = ProgressPool()
+       ppool = ProgressPool(self.bar1,self.loop)
 
-       ppool.add_pgbar(self.bar1)
-       ppool.add_loop(self.loop)
+       def process_results(results):
+           resfile = open(output,'w')
+           for r in results:
+               resfile.write(r+"\n")
 
        if(sslp=="yes"):
-         results = ppool.map(scan_ssl, data)
+         results = ppool.map(scan_ssl, data, callback=process_results)
        else:
-         results = ppool.map(scan_nossl, data)
-       #pprint.pprint(results)
-       resfile = open(output,'w')
-       for r in results:
-         resfile.write(r+"\n")
-
-
+         results = ppool.map(scan_nossl, data, callback=process_results)
 
     def main(self):
         self.loop = urwid.MainLoop(self.view, self.palette)

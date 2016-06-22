@@ -16,13 +16,13 @@ class ProgressPool(Pool):
     multiprocessing not working in an interactive interpreter apply.
 
     """
-    def add_pgbar(self, bar):
-        self.bar = bar
-    def add_loop(self, loop):
-        self.loop = loop
 
-
-    def map(self, func, iterable, chunksize=1, pbar='ProgressPool'):
+    def __init__(self, bar, loop):
+	super(ProgressPool, self).__init__()
+	self.bar = bar
+	self.loop = loop
+	
+    def map(self, func, iterable, callback, chunksize=1, pbar='ProgressPool'):
         """ Apply function on iterables in available subprocess workers.
 
         Parameters
@@ -56,19 +56,20 @@ class ProgressPool(Pool):
         self.bar.done = total_items
 
         # get the pool working asynchronously
-        a_map = self.map_async(func, iterable, chunksize)
+        a_map = self.map_async(func, iterable, chunksize, callback=callback)
 
         # Crux: monitor the _number_left of the a_map, and update the progress
         # bar accordingly
         # TODO should probably check for termination on each run here
-        while True:
-            time.sleep(0.5)
+        def update_completion(loop, user_data):
+            time.sleep(0.1)
             left = a_map._number_left
             self.bar.set_completion(total_items-left)
 
             if left == 0:
-                break
-            self.loop.draw_screen()
-        
-        return a_map.get()
+                return
+	    loop.set_alarm_in(0.2,update_completion)
+            loop.draw_screen()
+        self.alarm = self.loop.set_alarm_in(0.2,update_completion) 
+        return a_map
 
