@@ -134,7 +134,7 @@ class DialogDisplay:
     def __init__(self, text, height, width, body=None):
         self.bar1 = urwid.ProgressBar('pg normal', 'pg complete')
         # Create BigText
-        bt = urwid.BigText("Scanner",  urwid.font.Thin6x6Font())
+        bt = urwid.BigText("pScanner",  urwid.font.Thin6x6Font())
         bt = urwid.Padding(bt, 'left', width='clip')
         bt = urwid.Filler(bt, 'bottom')
         bt = urwid.BoxAdapter(bt, 7)
@@ -254,7 +254,7 @@ def main():
 
     global di
 
-    di = DialogDisplay( "Scanner v0.99", 50, 50)
+    di = DialogDisplay( "pScanner v0.99", 50, 50)
     di.add_buttons([    ("Exit", 0), ("Start", 0) ])
 
 
