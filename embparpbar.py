@@ -1,21 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" A multiprocess `Pool` variant with a `ProgressBar`.  """
+__author__ = "Marcin Kozlowski <marcinguy@gmail.com>"
 
-__author__ = "Valentin Haenel <valentin.haenel@epfl.ch>"
 
 import time
 from multiprocessing.pool import Pool
 from progressbar import ProgressBar, Percentage, Bar, ETA
 
 class ProgressPool(Pool):
-    """ Extension of `multiprocessing.Pool` with `ProgressBar`.
-
-    The `map` function now displays a progress bar. The usual caveats about
-    multiprocessing not working in an interactive interpreter apply.
-
-    """
 
     def __init__(self, bar, loop):
 	super(ProgressPool, self).__init__()
@@ -23,30 +16,7 @@ class ProgressPool(Pool):
 	self.loop = loop
 
     def map(self, func, iterable, callback, chunksize=1, pbar='ProgressPool'):
-        """ Apply function on iterables in available subprocess workers.
-
-        Parameters
-        ----------
-        func : callable
-            the function to execute
-        iterable : iterable
-            the arguments to the func
-        chunksize : int, default: 1
-            the approximate number of tasks to distribute to a process at once
-        pbar : str or ProgressBar
-            if str, use the string in a standard ProgressBar, else use the
-            given ProgressBar
-
-        Returns
-        -------
-        results : list
-            the result of applying func to each value in iterables
-
-        Raises
-        ------
-        TypeError if the pbar argument has the wrong type
-
-        """
+        
         # need to get the length, for the progress bar
         if not hasattr(iterable, '__len__'):
             iterable = list(iterable)

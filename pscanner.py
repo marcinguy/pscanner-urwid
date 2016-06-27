@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+__author__ = "Marcin Kozlowski <marcinguy@gmail.com>"
+
 import sys
 import urwid
 import os
