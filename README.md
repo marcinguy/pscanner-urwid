@@ -6,6 +6,7 @@ Parallel IP scanner with progressbar and SSL support (Urwid version)
 
 Parallel IP scanner with progressbar and SSL support. Cut the scan time based on the amount of the cores installed on your computer.
 
+![](images/pscanner-urwid.png)
 ## Dependencies
 
 
